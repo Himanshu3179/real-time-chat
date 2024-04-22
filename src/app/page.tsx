@@ -11,17 +11,16 @@ export default function Home() {
   const [roomId, setroomId] = useState("");
 
   var socket: any;
-  socket = io("http://localhost:3001");
+  socket = io(process.env.NEXT_PUBLIC_SOCKET_URL as string);
 
   const handleJoin = () => {
     if (userName !== "" && roomId !== "") {
       console.log(userName, "userName", roomId, "roomId");
       socket.emit("join_room", roomId);
       setShowSpinner(true);
-      setTimeout(() => {
-        setShowChat(true);
-        setShowSpinner(false);
-      }, 4000);
+
+      setShowChat(true);
+      setShowSpinner(false);
     } else {
       alert("Please fill in Username and Room Id");
     }
