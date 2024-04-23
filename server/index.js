@@ -1,10 +1,11 @@
+const express = require("express");
 const http = require("http");
 const { Server } = require("socket.io");
 const cors = require("cors");
 const dotenv = require("dotenv");
-const httpServer = http.createServer();
 
-dotenv.config();
+const app = express();
+const httpServer = http.createServer(app);
 const io = new Server(httpServer, {
     cors: {
         origin: process.env.CLIENT_URL,
@@ -14,8 +15,13 @@ const io = new Server(httpServer, {
     },
 });
 
+dotenv.config();
+
+app.use(cors());
+
 io.on("connection", (socket) => {
     console.log("A user connected:", socket.id);
+
     socket.on("join_room", (roomId) => {
         socket.join(roomId);
         console.log(`user with id-${socket.id} joined room - ${roomId}`);
@@ -32,6 +38,7 @@ io.on("connection", (socket) => {
 });
 
 const PORT = process.env.PORT || 3001;
+
 httpServer.listen(PORT, () => {
     console.log(`Socket.io server is running on port ${PORT}`);
 });
