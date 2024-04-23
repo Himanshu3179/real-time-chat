@@ -18,6 +18,9 @@ const io = new Server(httpServer, {
 dotenv.config();
 
 app.use(cors());
+app.get("/", (req, res) => {
+    res.send("Server is running");
+});
 
 io.on("connection", (socket) => {
     console.log("A user connected:", socket.id);
